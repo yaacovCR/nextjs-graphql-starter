@@ -1,0 +1,21 @@
+{
+  "name": "nextjs-graphql-starter-api",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv-load": "^1.1.0",
+    "express-session": "^1.15.6",
+    "graphql": "^14.1.1",
+    "graphql-yoga": "^1.17.1",
+    "morgan": "^1.9.1",
+    "prisma-client-lib": "^1.25.4"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon -e js,graphql src/index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

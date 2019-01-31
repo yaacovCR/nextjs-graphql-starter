@@ -1,0 +1,16 @@
+{
+  "name": "nextjs-graphql-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "lint": "prettier --single-quote --write \"**/*.{js,graphql,json,yml,yaml}\"",
+    "deploy": "prisma deploy -e .env && prisma generate -e .env",
+    "playground": "graphql -e .env playground"
+  },
+  "devDependencies": {
+    "graphql": "^14.1.1",
+    "graphql-cli": "^3.0.8",
+    "prettier": "1.16.2",
+    "prisma": "^1.25.4"
+  }
+}

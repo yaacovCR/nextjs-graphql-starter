@@ -1,0 +1,10 @@
+projects:
+  app:
+    schemaPath: ./api/src/schema.graphql
+    extensions:
+      endpoints:
+        default: ${env:GRAPHQL_ENDPOINT}
+  prisma:
+    schemaPath: ./api/src/generated/prisma-schema.graphql
+    extensions:
+      prisma: prisma.yml
