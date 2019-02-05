@@ -1,19 +1,7 @@
 import React from 'react';
+import { GetSessionQuery } from './queries';
 import Toolbar from '../components/Toolbar';
 import SignIn from '../components/SignIn';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-
-const GET_SESSION_QUERY = gql`
-  query {
-    getSession {
-      loggedInUser {
-        id
-        email
-      }
-    }
-  }
-`;
 
 export default Component => {
   return class withAuth extends React.Component {
@@ -32,7 +20,7 @@ export default Component => {
 
     render() {
       return (
-        <Query query={GET_SESSION_QUERY}>
+        <GetSessionQuery>
           {({ data }) => {
             return (
               <>
@@ -50,7 +38,7 @@ export default Component => {
               </>
             );
           }}
-        </Query>
+        </GetSessionQuery>
       );
     }
   };
