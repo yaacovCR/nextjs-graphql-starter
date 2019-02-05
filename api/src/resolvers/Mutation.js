@@ -24,7 +24,7 @@ const Mutation = {
     });
 
     const { password: omit, ...sanitizedUser } = user;
-    context.request.session.user = sanitizedUser;
+    context.session.user = sanitizedUser;
 
     return {
       result: 'SUCCESS',
@@ -45,7 +45,7 @@ const Mutation = {
       return { result: 'INVALID_LOGIN_COMBINATION', user: undefined };
     }
 
-    context.request.session.user = {
+    context.session.user = {
       id: user.id
     };
 
@@ -58,11 +58,11 @@ const Mutation = {
   },
 
   logout: (parent, args, context) => {
-    if (!context.request.session.user) {
+    if (!context.session.user) {
       throw new Error('Not authenticated');
     }
 
-    context.request.session.user = undefined;
+    context.session.destroy();
 
     return {
       result: 'SUCCESS',

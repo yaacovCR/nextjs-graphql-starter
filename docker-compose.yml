@@ -69,6 +69,16 @@ services:
     restart: always
     hostname: server
     ports:
-      - 5672:5672   
+      - 5672:5672
+  redis:
+    image: redis:5
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+    sysctls:
+      net.core.somaxconn: 511
 volumes:
   postgres: null
+  redis: null

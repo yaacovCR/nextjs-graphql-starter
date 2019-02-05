@@ -58,7 +58,7 @@ function createApolloClient(initialState, { getCookies }) {
       return kind === 'OperationDefinition' && operation === 'subscription';
     },
     wsLink,
-    httpLink,
+    httpLink
   );
 
   const link = ApolloLink.from([errorLink, authLink, terminatingLink]);
