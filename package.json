@@ -3,14 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "knex": "knex",
     "lint": "prettier --single-quote --write \"**/*.{js,graphql,json,yml,yaml}\"",
-    "deploy": "prisma deploy -e .env && prisma generate -e .env",
     "playground": "graphql -e .env playground"
   },
   "devDependencies": {
     "graphql": "^14.1.1",
     "graphql-cli": "^3.0.8",
-    "prettier": "1.16.2",
-    "prisma": "^1.25.4"
+    "knex": "^0.16.3",
+    "pg": "^7.8.0",
+    "prettier": "1.16.2"
+  },
+  "dependencies": {
+    "dotenv-load": "^1.1.0"
   }
 }

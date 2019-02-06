@@ -14,8 +14,8 @@ const http = require('http');
 const express = require('express');
 const { importSchema } = require('graphql-import');
 const { ApolloServer } = require('apollo-server-express');
-const { prisma } = require('./generated/prisma-client');
 const { resolvers } = require('./resolvers');
+const { dataSources } = require('./dataSources');
 const morgan = require('morgan');
 
 const typeDefs = importSchema('./src/schema.graphql');
@@ -49,7 +49,6 @@ const subscriptions = {
 // session.
 const context = async ({ req, connection }) => {
   const context = {
-    prisma,
     pubsub
   };
 
@@ -69,6 +68,7 @@ const context = async ({ req, connection }) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  dataSources,
   subscriptions,
   context
 });

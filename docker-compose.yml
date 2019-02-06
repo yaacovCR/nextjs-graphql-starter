@@ -13,7 +13,6 @@ services:
     environment:
       - NODE_ENV=development
       - PORT=4000
-      - PRISMA_ENDPOINT=http://prisma:4466/nextjs-graphql-starter
       - ENDPOINT=/api
       - CHOKIDAR_USEPOLLING=true
       - CHOKIDAR_INTERVAL=3000
@@ -35,41 +34,17 @@ services:
       - GRAPHQL_PROXY_TARGET=http://api:4000
       - GRAPHQL_ENDPOINT=http://localhost:3000/api
       - WS_ENDPOINT=ws://localhost:4000
-  prisma:
-    image: prismagraphql/prisma:1.25
-    restart: always
-    ports:
-      - 4466:4466
-    environment:
-      PRISMA_CONFIG: |
-        port: 4466
-        # uncomment the next line and provide the env var PRISMA_MANAGEMENT_API_SECRET=my-secret to activate cluster security
-        # managementApiSecret: my-secret
-        rabbitUri: amqp://server
-        databases:
-          default:
-            connector: postgres
-            host: postgres
-            port: 5432
-            user: prisma
-            password: prisma
-            migrations: true
   postgres:
     image: postgres:11
     restart: always
     ports:
       - 5432:5432
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dev
     volumes:
       - postgres:/var/lib/postgresql/data
-  rabbitmq:
-    image: rabbitmq:3
-    restart: always
-    hostname: server
-    ports:
-      - 5672:5672
   redis:
     image: redis:5
     restart: always
