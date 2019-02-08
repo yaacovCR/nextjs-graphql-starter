@@ -12,13 +12,11 @@ const signature = require('cookie-signature');
 const util = require('util');
 const http = require('http');
 const express = require('express');
-const { importSchema } = require('graphql-import');
 const { ApolloServer } = require('apollo-server-express');
+const { typeDefs } = require('./typeDefs');
 const { resolvers } = require('./resolvers');
 const { dataSources } = require('./dataSources');
 const morgan = require('morgan');
-
-const typeDefs = importSchema('./src/schema.graphql');
 
 // Use redis for session management and subscriptions
 const redisOptions = { host: process.env.REDIS_HOST };
