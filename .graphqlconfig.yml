@@ -4,3 +4,7 @@ projects:
     extensions:
       endpoints:
         default: ${env:GRAPHQL_ENDPOINT}
+  hasura:
+    extensions:
+      endpoints:
+        default: ${env:HASURA_ENDPOINT}

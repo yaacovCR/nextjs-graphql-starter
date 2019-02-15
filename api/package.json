@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "apollo-datasource": "^0.2.2",
+    "apollo-link-http": "^1.5.11",
     "apollo-server-express": "^2.3.3",
     "bcryptjs": "^2.4.3",
     "connect-redis": "^3.4.0",
@@ -15,9 +16,8 @@
     "express-session": "^1.15.6",
     "graphql": "^14.1.1",
     "graphql-redis-subscriptions": "^2.0.0",
-    "knex": "^0.16.3",
     "morgan": "^1.9.1",
-    "pg": "^7.8.0"
+    "node-fetch": "^2.3.0"
   },
   "scripts": {
     "start": "node src/index.js",

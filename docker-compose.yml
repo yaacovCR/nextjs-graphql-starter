@@ -10,6 +10,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 4000:4000
+    depends_on:
+      - 'hasura'
     environment:
       - NODE_ENV=development
       - PORT=4000
@@ -26,6 +28,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - 3000:3000
+    depends_on:
+      - 'api'
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -34,6 +38,19 @@ services:
       - GRAPHQL_PROXY_TARGET=http://api:4000
       - GRAPHQL_ENDPOINT=http://localhost:3000/api
       - WS_ENDPOINT=ws://localhost:4000
+  hasura:
+    image: hasura/graphql-engine
+    restart: always
+    ports:
+      - 5000:8080
+    depends_on:
+      - 'postgres'
+    environment:
+      HASURA_GRAPHQL_DATABASE_URL: ${DATABASE_URL}
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      ## uncomment next line to set an access key
+      # HASURA_GRAPHQL_ACCESS_KEY: mysecretaccesskey
   postgres:
     image: postgres:11
     restart: always
