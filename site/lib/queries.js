@@ -7,7 +7,6 @@ const GET_SESSION_QUERY = gql`
   query {
     getSession {
       loggedInUser {
-        id
         email
       }
     }

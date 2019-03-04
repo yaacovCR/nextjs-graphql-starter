@@ -1,6 +1,7 @@
 const { ApolloServer } = require('apollo-server-express');
 const { RedisPubSub } = require('graphql-redis-subscriptions');
-const { createSchema } = require('./createSchema');
+const { createSchemas } = require('./createSchemas');
+const { DbStitcher } = require('./lib/DbStitcher');
 const { createOnConnectHandler } = require('./createOnConnectHandler');
 const express = require('express');
 const { applyExpressMiddleware } = require('./applyExpressMiddleware');
@@ -13,9 +14,11 @@ class Server {
 
   async prepare() {
     const pubsub = new RedisPubSub({ connection: this.options.redisOptions });
+    const { dbSchema, schema } = await createSchemas();
+    const db = new DbStitcher({ schema: dbSchema });
 
     this.server = new ApolloServer({
-      schema: await createSchema(),
+      schema,
       subscriptions: {
         // Use base path for subscriptions on websocket protocol
         path: '/',
@@ -25,9 +28,9 @@ class Server {
           redisOptions: this.options.redisOptions
         })
       },
-      context: async ({ req, connection }) => {
-        // add pubsub to context
-        const context = { pubsub };
+      context: ({ req, connection }) => {
+        // add pubsub and stitcher to context
+        const context = { pubsub, db };
 
         // In hybrid websocket deployments, subscriptions supply connection argument instead of
         // the req & res arguments (supplied when using the express integration).
@@ -85,4 +88,6 @@ class Server {
   }
 }
 
-module.exports = Server;
+module.exports = {
+  Server
+};

@@ -68,6 +68,8 @@ function createApolloClient(initialState, { getCookies }) {
       switch (object.__typename) {
         case 'Session':
           return 'Session'; // Singleton
+        case 'User':
+          return `User:${object.email}`;
         default:
           return defaultDataIdFromObject(object); // fall back to default handling
       }

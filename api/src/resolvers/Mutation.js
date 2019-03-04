@@ -1,60 +1,45 @@
 const bcrypt = require('bcryptjs');
 
 const Mutation = {
-  signUp: async (parent, args, context) => {
+  signUp: async (parent, args, context, info) => {
     const {
       input: { email, password }
     } = args;
     const lowerCaseEmail = email.toLowerCase();
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    const emailExists = await context.prisma.$exists.user({
-      email: lowerCaseEmail
-    });
-    if (emailExists) {
-      return {
-        result: 'NONUNIQUE_EMAIL',
-        user: undefined
-      };
+    if (await context.db.stitch(info).toUserExists({ email: lowerCaseEmail })) {
+      return { result: 'NONUNIQUE_EMAIL', user: undefined };
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await context.prisma.createUser({
+    const response = await context.db.stitch(info).fromSignUpToInsertUser({
       email: lowerCaseEmail,
       password: hashedPassword
     });
 
-    const { password: omit, ...sanitizedUser } = user;
-    context.session.user = sanitizedUser;
-
-    return {
-      result: 'SUCCESS',
-      session: {
-        loggedInUser: user
-      }
+    context.session.user = {
+      id: response.session.loggedInUser.email
     };
+
+    return response;
   },
 
-  login: async (parent, args, context) => {
+  login: async (parent, args, context, info) => {
     const {
       input: { email, password }
     } = args;
     const lowerCaseEmail = email.toLowerCase();
-    const user = await context.prisma.user({ email: lowerCaseEmail });
-
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    const response = await context.db.stitch(info).fromLoginToGetUser({ email: lowerCaseEmail });
+    
+    if (!response || !(await bcrypt.compare(password, response.session.loggedInUser.password))) {
       return { result: 'INVALID_LOGIN_COMBINATION', user: undefined };
     }
 
     context.session.user = {
-      id: user.id
+      id: response.session.loggedInUser.email
     };
 
-    return {
-      result: 'SUCCESS',
-      session: {
-        loggedInUser: user
-      }
-    };
+    return response;
   },
 
   logout: (parent, args, context) => {

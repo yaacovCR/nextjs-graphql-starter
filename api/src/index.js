@@ -5,7 +5,7 @@ require('dotenv-load')();
 // Use redis for session management and subscriptions
 const redisOptions = { host: process.env.REDIS_HOST };
 const sessionName = 'id';
-const Server = require('./Server');
+const { Server } = require('./Server');
 
 const myServer = new Server({
   sessionName,

@@ -11,7 +11,6 @@ const SIGNUP_MUTATION = gql`
       result
       session {
         loggedInUser {
-          id
           email
         }
       }
@@ -26,7 +25,6 @@ const LOGIN_MUTATION = gql`
       result
       session {
         loggedInUser {
-          id
           email
         }
       }
@@ -40,7 +38,6 @@ const LOGOUT_MUTATION = gql`
       result
       session {
         loggedInUser {
-          id
           email
         }
       }
