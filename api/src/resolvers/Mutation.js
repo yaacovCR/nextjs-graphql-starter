@@ -17,9 +17,11 @@ const Mutation = {
       password: hashedPassword
     });
 
-    context.session.user = {
-      id: response.session.loggedInUser.email
-    };
+    if (response) {
+      context.session.user = {
+        id: lowerCaseEmail
+      };
+    }
 
     return response;
   },
@@ -29,14 +31,19 @@ const Mutation = {
       input: { email, password }
     } = args;
     const lowerCaseEmail = email.toLowerCase();
-    const response = await context.db.stitch(info).fromLoginToGetUser({ email: lowerCaseEmail });
-    
-    if (!response || !(await bcrypt.compare(password, response.session.loggedInUser.password))) {
+    const response = await context.db
+      .stitch(info)
+      .fromLoginToGetUser({ email: lowerCaseEmail });
+
+    if (
+      !response ||
+      !(await bcrypt.compare(password, response.session.loggedInUser.password))
+    ) {
       return { result: 'INVALID_LOGIN_COMBINATION', user: undefined };
     }
 
     context.session.user = {
-      id: response.session.loggedInUser.email
+      id: lowerCaseEmail
     };
 
     return response;

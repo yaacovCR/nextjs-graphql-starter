@@ -1,18 +1,16 @@
 const Query = {
-  getSession: async (parent, args, context) => {
+  getSession: async (parent, args, context, info) => {
     if (!context.session.user) {
       return {
         loggedInUser: undefined
       };
     }
 
-    const user = await context.prisma.user({
-      id: context.session.user.id
+    const session = await context.db.stitch(info).fromGetSessionToGetUser({
+      email: context.session.user.id
     });
 
-    return {
-      loggedInUser: user
-    };
+    return session;
   }
 };
 

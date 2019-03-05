@@ -7,11 +7,8 @@ const ws = require('websocket');
 const fetch = require('node-fetch');
 const {
   makeRemoteExecutableSchema,
-  introspectSchema,
-  mergeSchemas
+  introspectSchema
 } = require('apollo-server-express');
-const { typeDefs } = require('./typeDefs');
-const { resolvers } = require('./resolvers');
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
@@ -50,29 +47,11 @@ const link = ApolloLink.from([errorLink, terminatingLink]);
 const createDbSchema = async () => {
   try {
     const schema = await introspectSchema(link);
-
-    const executableSchema = makeRemoteExecutableSchema({
-      schema,
-      link
-    });
-
+    const executableSchema = makeRemoteExecutableSchema({ schema, link });
     return executableSchema;
   } catch (err) {
     console.error(err);
   }
 };
 
-const createSchemas = async () => {
-  try {
-    const dbSchema = await createDbSchema();
-    const schema = mergeSchemas({
-      schemas: [dbSchema, typeDefs],
-      resolvers
-    });
-    return { dbSchema, schema };
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-module.exports = { createSchemas };
+module.exports = { createDbSchema };

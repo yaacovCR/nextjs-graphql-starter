@@ -1,7 +1,9 @@
 const { ApolloServer } = require('apollo-server-express');
 const { RedisPubSub } = require('graphql-redis-subscriptions');
-const { createSchemas } = require('./createSchemas');
+const { createDbSchema } = require('./createDbSchema');
 const { DbStitcher } = require('./lib/DbStitcher');
+const { typeDefs } = require('./typeDefs');
+const { resolvers } = require('./resolvers');
 const { createOnConnectHandler } = require('./createOnConnectHandler');
 const express = require('express');
 const { applyExpressMiddleware } = require('./applyExpressMiddleware');
@@ -14,11 +16,12 @@ class Server {
 
   async prepare() {
     const pubsub = new RedisPubSub({ connection: this.options.redisOptions });
-    const { dbSchema, schema } = await createSchemas();
+    const dbSchema = await createDbSchema();
     const db = new DbStitcher({ schema: dbSchema });
 
     this.server = new ApolloServer({
-      schema,
+      typeDefs,
+      resolvers,
       subscriptions: {
         // Use base path for subscriptions on websocket protocol
         path: '/',

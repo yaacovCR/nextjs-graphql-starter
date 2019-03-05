@@ -1,5 +1,4 @@
 const { Stitcher } = require('./Stitcher');
-const { Kind } = require('graphql');
 
 class DbStitcher extends Stitcher {
   constructor(options) {
@@ -11,13 +10,9 @@ class DbStitcher extends Stitcher {
       operation: 'query',
       fieldName: 'user_by_pk',
       args,
-      selectionator: () => ({
-        kind: Kind.FIELD,
-        name: {
-          kind: Kind.NAME,
-          value: 'email'
-        }
-      }),
+      selectionSet: `{
+        email
+      }`,
       extractor: result => !!result
     });
   }
@@ -26,31 +21,33 @@ class DbStitcher extends Stitcher {
     return this.to({
       operation: 'query',
       fieldName: 'user_by_pk',
-      args,
-      selectionator: subtree => {
-        return {
-          kind: Kind.SELECTION_SET,
-          selections: subtree.selections.concat({
-            kind: Kind.FIELD,
-            name: {
-              kind: Kind.NAME,
-              value: 'password'
-            }
-          })
-        };
-      }
+      args
     });
   }
 
   fromLoginToGetUser(args) {
     return this.from({
       path: ['session', 'loggedInUser'],
+      selectionSet: `{
+        ...PreStitch
+        password
+      }`,
       extractor: result =>
         result && {
           result: 'SUCCESS',
           session: {
             loggedInUser: result
           }
+        }
+    }).toGetUser(args);
+  }
+
+  fromGetSessionToGetUser(args) {
+    return this.from({
+      path: ['loggedInUser'],
+      extractor: result =>
+        result && {
+          loggedInUser: result
         }
     }).toGetUser(args);
   }
@@ -62,15 +59,17 @@ class DbStitcher extends Stitcher {
       args: {
         objects: [args]
       },
-      selectionator: subtree => ({
-        kind: Kind.FIELD,
-        name: {
-          kind: Kind.NAME,
-          value: 'returning'
-        },
-        selectionSet: subtree
-      }),
-      extractor: result => result && result.returning && result.returning[0]
+      selectionSet: `{
+        affected_rows
+        returning {
+          ...PreStitch
+        }
+      }`,
+      extractor: result => {
+        if (!result || !result.affected_rows) return null;
+        if (result.returning) return result.returning[0];
+        return {};
+      }
     });
   }
 
