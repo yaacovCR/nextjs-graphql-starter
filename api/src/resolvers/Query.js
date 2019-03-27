@@ -6,11 +6,14 @@ const Query = {
       };
     }
 
-    const session = await context.db.stitch(info).fromGetSessionToGetUser({
-      email: context.session.user.id
-    });
+    const user = await context.db
+      .stitch(info)
+      .from({ path: ['loggedInUser'] })
+      .toGetUser({ email: context.session.user.id });
 
-    return session;
+    return {
+      loggedInUser: user
+    };
   }
 };
 

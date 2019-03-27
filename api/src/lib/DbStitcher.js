@@ -1,12 +1,9 @@
 const { Stitcher } = require('./Stitcher');
 
 class DbStitcher extends Stitcher {
-  constructor(options) {
-    super(options);
-  }
 
-  toUserExists(args) {
-    return this.to({
+  userExists(args) {
+    return this.execute({
       operation: 'query',
       fieldName: 'user_by_pk',
       args,
@@ -23,33 +20,6 @@ class DbStitcher extends Stitcher {
       fieldName: 'user_by_pk',
       args
     });
-  }
-
-  fromLoginToGetUser(args) {
-    return this.from({
-      path: ['session', 'loggedInUser'],
-      selectionSet: `{
-        ...PreStitch
-        password
-      }`,
-      extractor: result =>
-        result && {
-          result: 'SUCCESS',
-          session: {
-            loggedInUser: result
-          }
-        }
-    }).toGetUser(args);
-  }
-
-  fromGetSessionToGetUser(args) {
-    return this.from({
-      path: ['loggedInUser'],
-      extractor: result =>
-        result && {
-          loggedInUser: result
-        }
-    }).toGetUser(args);
   }
 
   toInsertUser(args) {
@@ -73,18 +43,6 @@ class DbStitcher extends Stitcher {
     });
   }
 
-  fromSignUpToInsertUser(args) {
-    return this.from({
-      path: ['session', 'loggedInUser'],
-      extractor: result =>
-        result && {
-          result: 'SUCCESS',
-          session: {
-            loggedInUser: result
-          }
-        }
-    }).toInsertUser(args);
-  }
 }
 
 module.exports = {
