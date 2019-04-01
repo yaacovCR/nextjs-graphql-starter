@@ -85,8 +85,8 @@ const typeDefs = gql`
   User data
   """
   type User {
-      email: String!
-    }
+    email: String!
+  }
 `;
 
 module.exports = {
