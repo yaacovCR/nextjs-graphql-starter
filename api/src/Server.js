@@ -4,11 +4,11 @@ const { createDbSchema } = require('./createDbSchema');
 const {
   makeRemoteExecutableSchema,
   ApolloClientLink
-} = require('./lib/Stitcher');
+} = require('apollo-stitcher');
 const { link } = require('./link');
 const { ApolloClient } = require('apollo-client');
 const { InMemoryCache } = require('apollo-cache-inmemory');
-const { DbStitcher } = require('./lib/DbStitcher');
+const { DbStitcher } = require('./DbStitcher');
 const { typeDefs } = require('./typeDefs');
 const { resolvers } = require('./resolvers');
 const { createOnConnectHandler } = require('./createOnConnectHandler');

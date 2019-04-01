@@ -1,4 +1,4 @@
-const { Stitcher } = require('./Stitcher');
+const { Stitcher } = require('apollo-stitcher');
 
 class DbStitcher extends Stitcher {
 
