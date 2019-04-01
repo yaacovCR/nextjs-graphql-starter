@@ -1,6 +1,13 @@
 const { ApolloServer } = require('apollo-server-express');
 const { RedisPubSub } = require('graphql-redis-subscriptions');
 const { createDbSchema } = require('./createDbSchema');
+const {
+  makeRemoteExecutableSchema,
+  ApolloClientLink
+} = require('./lib/Stitcher');
+const { link } = require('./link');
+const { ApolloClient } = require('apollo-client');
+const { InMemoryCache } = require('apollo-cache-inmemory');
 const { DbStitcher } = require('./lib/DbStitcher');
 const { typeDefs } = require('./typeDefs');
 const { resolvers } = require('./resolvers');
@@ -16,8 +23,10 @@ class Server {
 
   async prepare() {
     const pubsub = new RedisPubSub({ connection: this.options.redisOptions });
-    const dbSchema = await createDbSchema();
-    const db = new DbStitcher({ schema: dbSchema });
+    const schema = makeRemoteExecutableSchema({
+      schema: await createDbSchema(),
+      dispatcher: context => context.link
+    });
 
     this.server = new ApolloServer({
       typeDefs,
@@ -31,9 +40,19 @@ class Server {
           redisOptions: this.options.redisOptions
         })
       },
+
       context: ({ req, connection }) => {
-        // add pubsub and stitcher to context
-        const context = { pubsub, db };
+        // add pubsub and a context-specific link to context
+        const context = {
+          pubsub,
+          link: new ApolloClientLink({
+            client: new ApolloClient({
+              cache: new InMemoryCache(),
+              link,
+              ssrMode: true
+            })
+          })
+        };
 
         // In hybrid websocket deployments, subscriptions supply connection argument instead of
         // the req & res arguments (supplied when using the express integration).
@@ -53,6 +72,12 @@ class Server {
         return {
           ...context,
           session: req.session
+        };
+      },
+
+      dataSources: () => {
+        return {
+          db: new DbStitcher({ schema })
         };
       }
     });

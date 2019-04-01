@@ -1,7 +1,10 @@
-const { StitchQuery } = require('./StitchQuery');
+const { DataSource } = require('apollo-datasource');
 const { delegateToSchema } = require('graphql-tools');
+const { StitchQuery } = require('./StitchQuery');
+const { makeRemoteExecutableSchema } = require('./makeRemoteExecutableSchema');
+const { ApolloClientLink } = require('./ApolloClientLink');
 
-class Stitcher {
+class Stitcher extends DataSource {
   constructor({
     schema,
     context,
@@ -9,16 +12,20 @@ class Stitcher {
     preStitchFragmentName = 'PreStitch',
     transforms = []
   }) {
+    super();
     this.stitchOptions = {
       schema,
       context,
+      info,
       transforms
     };
 
-    if (info) this.stitchOptions.info = { ...info };
-
     this.preStitchFragmentName = preStitchFragmentName;
     this.fromStitch = {};
+  }
+
+  initialize(config) {
+    this.stitchOptions.context = config.context;
   }
 
   from(options) {
@@ -78,5 +85,8 @@ class Stitcher {
 }
 
 module.exports = {
-  Stitcher
+  Stitcher,
+  StitchQuery,
+  makeRemoteExecutableSchema,
+  ApolloClientLink
 };

@@ -8,11 +8,11 @@ const Mutation = {
     const lowerCaseEmail = email.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    if (await context.db.userExists({ email: lowerCaseEmail })) {
+    if (await context.dataSources.db.userExists({ email: lowerCaseEmail })) {
       return { result: 'NONUNIQUE_EMAIL', user: undefined };
     }
 
-    const user = await context.db
+    const user = await context.dataSources.db
       .stitch(info)
       .from({ path: ['session', 'loggedInUser'] })
       .toInsertUser({
@@ -40,7 +40,7 @@ const Mutation = {
     } = args;
     const lowerCaseEmail = email.toLowerCase();
 
-    const user = await context.db
+    const user = await context.dataSources.db
       .stitch(info)
       .from({
         path: ['session', 'loggedInUser'],

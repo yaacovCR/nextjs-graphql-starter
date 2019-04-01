@@ -6,7 +6,7 @@ const Query = {
       };
     }
 
-    const user = await context.db
+    const user = await context.dataSources.db
       .stitch(info)
       .from({ path: ['loggedInUser'] })
       .toGetUser({ email: context.session.user.id });
