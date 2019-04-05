@@ -35,11 +35,8 @@ class DbStitcher extends Stitcher {
           ...PreStitch
         }
       }`,
-      extractor: result => {
-        if (!result || !result.affected_rows) return null;
-        if (result.returning) return result.returning[0];
-        return {};
-      }
+      extractor: result =>
+        result && result.affected_rows ? result.returning[0] : null
     });
   }
 
