@@ -1,6 +1,5 @@
 projects:
   app:
-    schemaPath: ./api/src/schema.graphql
     extensions:
       endpoints:
         default: ${env:GRAPHQL_ENDPOINT}
