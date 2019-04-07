@@ -2,7 +2,7 @@ const Query = {
   getSession: async (parent, args, context, info) => {
     if (!context.session.user) {
       return {
-        loggedInUser: undefined
+        loggedInUser: null
       };
     }
 

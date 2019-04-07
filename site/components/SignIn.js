@@ -64,13 +64,13 @@ class SignIn extends Component {
   };
 
   handleSignUpMutationResponse = data => {
-    if (data.signUp.result !== 'SUCCESS')
-      this.setState({ error: data.signUp.result });
+    if (data.signUp.response !== 'SUCCESS')
+      this.setState({ error: data.signUp.response });
   };
 
   handleLoginMutationResponse = data => {
-    if (data.login.result !== 'SUCCESS')
-      this.setState({ error: data.login.result });
+    if (data.login.response !== 'SUCCESS')
+      this.setState({ error: data.login.response });
   };
 
   render() {

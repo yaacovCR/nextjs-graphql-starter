@@ -6,9 +6,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    signUp(input: SignUpInput!): SignUpResponse!
-    login(input: LoginInput!): LoginResponse!
-    logout: LogoutResponse!
+    signUp(input: SignUpInput!): SignUpPayload!
+    login(input: LoginInput!): LoginPayload!
+    logout: LogoutPayload!
   }
 
   """
@@ -20,18 +20,18 @@ const typeDefs = gql`
   }
 
   """
-  Result of signUp mutation
+  Response for signUp mutation
   """
-  enum SignUpResult {
+  enum SignUpResponse {
     SUCCESS
     NONUNIQUE_EMAIL
   }
 
   """
-  Response for signUp mutation
+  Payload for signUp mutation
   """
-  type SignUpResponse {
-    result: SignUpResult!
+  type SignUpPayload {
+    response: SignUpResponse!
     session: Session
   }
 
@@ -44,40 +44,32 @@ const typeDefs = gql`
   }
 
   """
-  Result for login mutation
+  Response for login mutation
   """
-  enum LoginResult {
+  enum LoginResponse {
     SUCCESS
     INVALID_LOGIN_COMBINATION
   }
 
   """
-  Response to login Mutation
+  Payload to login Mutation
   """
-  type LoginResponse {
-    result: LoginResult!
+  type LoginPayload {
+    response: LoginResponse!
     session: Session
   }
 
   """
-  Response to login Mutation
+  Session data
   """
   type Session {
     loggedInUser: User
   }
 
   """
-  Result for logout mutation
+  Payload to login Mutation
   """
-  enum LogoutResult {
-    SUCCESS
-  }
-
-  """
-  Response to login Mutation
-  """
-  type LogoutResponse {
-    result: LogoutResult!
+  type LogoutPayload {
     session: Session
   }
 

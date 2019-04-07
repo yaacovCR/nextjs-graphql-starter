@@ -9,7 +9,7 @@ const Mutation = {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     if (await context.dataSources.db.userExists({ email: lowerCaseEmail })) {
-      return { result: 'NONUNIQUE_EMAIL', user: undefined };
+      return { response: 'NONUNIQUE_EMAIL', user: null };
     }
 
     const user = await context.dataSources.db
@@ -27,7 +27,7 @@ const Mutation = {
     }
 
     return {
-      result: 'SUCCESS',
+      response: 'SUCCESS',
       session: {
         loggedInUser: user
       }
@@ -52,7 +52,7 @@ const Mutation = {
       .toGetUser({ email: lowerCaseEmail });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return { result: 'INVALID_LOGIN_COMBINATION', user: undefined };
+      return { response: 'INVALID_LOGIN_COMBINATION', user: null };
     }
 
     context.session.user = {
@@ -60,7 +60,7 @@ const Mutation = {
     };
 
     return {
-      result: 'SUCCESS',
+      response: 'SUCCESS',
       session: {
         loggedInUser: user
       }
@@ -75,7 +75,7 @@ const Mutation = {
     context.session.destroy();
 
     return {
-      result: 'SUCCESS',
+      response: 'SUCCESS',
       session: {
         loggedInUser: null
       }

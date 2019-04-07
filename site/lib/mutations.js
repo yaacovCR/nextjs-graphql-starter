@@ -8,7 +8,7 @@ const SIGNUP_MUTATION = gql`
     @connection(key: "login", filter: ["input"]) {
     signUp(input: { email: $email, password: $password })
       @connection(key: "signUp") {
-      result
+      response
       session {
         loggedInUser {
           email
@@ -22,7 +22,7 @@ const LOGIN_MUTATION = gql`
   mutation LoginMutation($email: String!, $password: String!) {
     login(input: { email: $email, password: $password })
       @connection(key: "login") {
-      result
+      response
       session {
         loggedInUser {
           email
@@ -35,7 +35,6 @@ const LOGIN_MUTATION = gql`
 const LOGOUT_MUTATION = gql`
   mutation {
     logout {
-      result
       session {
         loggedInUser {
           email
