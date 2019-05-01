@@ -5,7 +5,7 @@ const {
   makeRemoteExecutableSchema,
   ApolloClientLink
 } = require('apollo-stitcher');
-const { link } = require('./link');
+const { createLink } = require('./createLink');
 const { ApolloClient } = require('apollo-client');
 const { InMemoryCache } = require('apollo-cache-inmemory');
 const { DbStitcher } = require('./DbStitcher');
@@ -15,6 +15,8 @@ const { createOnConnectHandler } = require('./createOnConnectHandler');
 const express = require('express');
 const { applyExpressMiddleware } = require('./applyExpressMiddleware');
 const http = require('http');
+const httpUri = 'http://localhost:5000/v1alpha1/graphql';
+const wsUri = 'ws://localhost:5000/v1alpha1/graphql';
 
 class Server {
   constructor(options) {
@@ -24,7 +26,7 @@ class Server {
   async prepare() {
     const pubsub = new RedisPubSub({ connection: this.options.redisOptions });
     const schema = makeRemoteExecutableSchema({
-      schema: await createDbSchema(),
+      schema: await createDbSchema(httpUri),
       dispatcher: context => context.link
     });
 
@@ -48,7 +50,7 @@ class Server {
           link: new ApolloClientLink({
             client: new ApolloClient({
               cache: new InMemoryCache(),
-              link,
+              link: createLink({ httpUri, wsUri }),
               ssrMode: true
             })
           })
