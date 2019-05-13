@@ -13,9 +13,13 @@ const Mutation = {
     }
 
     const user = await context.dataSources.db
-      .stitch(info)
-      .from({ path: ['session', 'loggedInUser'] })
-      .toInsertUser({
+      .from(info)
+      .transform({
+        selectionSet: `{
+          ...PreStitch @extract(path: ["session", "loggedInUser"])          
+        }`
+      })
+      .delegateToInsertUser({
         email: lowerCaseEmail,
         password: hashedPassword
       });
@@ -41,15 +45,14 @@ const Mutation = {
     const lowerCaseEmail = email.toLowerCase();
 
     const user = await context.dataSources.db
-      .stitch(info)
-      .from({
-        path: ['session', 'loggedInUser'],
+      .from(info)
+      .transform({
         selectionSet: `{
-            ...PreStitch
-            password
-          }`
+          ...PreStitch @extract(path: ["session", "loggedInUser"])
+          password
+        }`
       })
-      .toGetUser({ email: lowerCaseEmail });
+      .delegateToGetUser({ email: lowerCaseEmail });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return { response: 'INVALID_LOGIN_COMBINATION', user: null };

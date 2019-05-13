@@ -7,9 +7,13 @@ const Query = {
     }
 
     const user = await context.dataSources.db
-      .stitch(info)
-      .from({ path: ['loggedInUser'] })
-      .toGetUser({ email: context.session.user.id });
+      .from(info)
+      .transform({
+        selectionSet: `{
+          ...PreStitch @extract(path: "loggedInUser")
+        }`
+      })
+      .delegateToGetUser({ email: context.session.user.id });
 
     return {
       loggedInUser: user

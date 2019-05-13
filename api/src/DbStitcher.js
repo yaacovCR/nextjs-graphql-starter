@@ -1,7 +1,6 @@
 const { Stitcher } = require('apollo-stitcher');
 
 class DbStitcher extends Stitcher {
-
   userExists(args) {
     return this.execute({
       operation: 'query',
@@ -10,36 +9,36 @@ class DbStitcher extends Stitcher {
       selectionSet: `{
         email
       }`,
-      extractor: result => !!result
+      result: result => !!result
     });
   }
 
-  toGetUser(args) {
-    return this.to({
+  delegateToGetUser(args) {
+    return this.delegateTo({
       operation: 'query',
       fieldName: 'user_by_pk',
       args
     });
   }
 
-  toInsertUser(args) {
-    return this.to({
-      operation: 'mutation',
-      fieldName: 'insert_user',
-      args: {
-        objects: [args]
-      },
+  delegateToInsertUser(args) {
+    return this.transform({
       selectionSet: `{
         affected_rows
         returning {
           ...PreStitch
         }
       }`,
-      extractor: result =>
+      result: result =>
         result && result.affected_rows ? result.returning[0] : null
+    }).delegateTo({
+      operation: 'mutation',
+      fieldName: 'insert_user',
+      args: {
+        objects: [args]
+      }
     });
   }
-
 }
 
 module.exports = {
