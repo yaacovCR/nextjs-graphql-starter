@@ -1,4 +1,15 @@
-const { Stitcher } = require('apollo-stitcher');
+const { Stitcher, stitch } = require('apollo-stitcher');
+
+const wrapInsert = {
+  selectionSet: stitch`{
+    affected_rows
+    returning {
+      ...PreStitch
+    }
+  }`,
+  result: result =>
+    result && result.affected_rows ? result.returning[0] : null
+};
 
 class DbStitcher extends Stitcher {
   userExists(args) {
@@ -6,7 +17,7 @@ class DbStitcher extends Stitcher {
       operation: 'query',
       fieldName: 'user_by_pk',
       args,
-      selectionSet: `{
+      selectionSet: stitch`{
         email
       }`,
       result: result => !!result
@@ -22,16 +33,7 @@ class DbStitcher extends Stitcher {
   }
 
   delegateToInsertUser(args) {
-    return this.transform({
-      selectionSet: `{
-        affected_rows
-        returning {
-          ...PreStitch
-        }
-      }`,
-      result: result =>
-        result && result.affected_rows ? result.returning[0] : null
-    }).delegateTo({
+    return this.transform(wrapInsert).delegateTo({
       operation: 'mutation',
       fieldName: 'insert_user',
       args: {

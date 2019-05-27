@@ -1,4 +1,18 @@
 const bcrypt = require('bcryptjs');
+const { stitch } = require('apollo-stitcher');
+
+const extractLoggedInUser = {
+  selectionSet: stitch`{
+    ...PreStitch @extract(path: ["session", "loggedInUser"])          
+  }`
+};
+
+const addPassword = {
+  selectionSet: stitch`{
+    ...PreStitch
+    password          
+  }`
+};
 
 const Mutation = {
   signUp: async (parent, args, context, info) => {
@@ -14,11 +28,7 @@ const Mutation = {
 
     const user = await context.dataSources.db
       .from(info)
-      .transform({
-        selectionSet: `{
-          ...PreStitch @extract(path: ["session", "loggedInUser"])          
-        }`
-      })
+      .transform(extractLoggedInUser)
       .delegateToInsertUser({
         email: lowerCaseEmail,
         password: hashedPassword
@@ -46,12 +56,8 @@ const Mutation = {
 
     const user = await context.dataSources.db
       .from(info)
-      .transform({
-        selectionSet: `{
-          ...PreStitch @extract(path: ["session", "loggedInUser"])
-          password
-        }`
-      })
+      .transform(extractLoggedInUser)
+      .transform(addPassword)
       .delegateToGetUser({ email: lowerCaseEmail });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
