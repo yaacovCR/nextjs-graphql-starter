@@ -15,8 +15,8 @@ const { createOnConnectHandler } = require('./createOnConnectHandler');
 const express = require('express');
 const { applyExpressMiddleware } = require('./applyExpressMiddleware');
 const http = require('http');
-const httpUri = 'http://localhost:5000/v1alpha1/graphql';
-const wsUri = 'ws://localhost:5000/v1alpha1/graphql';
+const httpUri = 'http://localhost:5000/v1/graphql';
+const wsUri = 'ws://localhost:5000/v1/graphql';
 
 class Server {
   constructor(options) {

@@ -2,11 +2,10 @@ import React from 'react';
 import App, { Container } from 'next/app';
 import Head from 'next/head';
 import withApollo from '../lib/withApollo';
-import withMui from '../lib/withMui';
 import { ApolloProvider, compose } from 'react-apollo';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import JssProvider from 'react-jss/lib/JssProvider';
+import theme from '../lib/theme';
 
 class MyApp extends App {
   constructor() {
@@ -22,36 +21,21 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps, pageContext, apolloClient } = this.props;
+    const { Component, pageProps, apolloClient } = this.props;
     return (
       <Container>
         <Head>
           <title>nextjs-graphql-starter</title>
         </Head>
-        <JssProvider
-          registry={pageContext.sheetsRegistry}
-          generateClassName={pageContext.generateClassName}
-        >
-          <MuiThemeProvider
-            theme={pageContext.theme}
-            sheetsManager={pageContext.sheetsManager}
-          >
-            <CssBaseline />
-            <ApolloProvider client={apolloClient}>
-              {/* Pass pageContext to the _document though the renderPage enhancer
-                to render collected styles on server-side. */}
-              <Component pageContext={pageContext} {...pageProps} />
-            </ApolloProvider>
-          </MuiThemeProvider>
-        </JssProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ApolloProvider client={apolloClient}>
+            <Component {...pageProps} />
+          </ApolloProvider>
+        </ThemeProvider>
       </Container>
     );
   }
 }
 
-export default compose(
-  // withApollo must first enhancer so that it's getInitialProps can successfully
-  // call getDataFromTree
-  withApollo,
-  withMui
-)(MyApp);
+export default withApollo(MyApp);

@@ -39,7 +39,7 @@ services:
       - GRAPHQL_ENDPOINT=http://localhost:3000/api
       - WS_ENDPOINT=ws://localhost:4000
   hasura:
-    image: hasura/graphql-engine
+    image: hasura/graphql-engine:v1.0.0-beta.2
     restart: always
     ports:
       - 5000:8080
