@@ -1,4 +1,5 @@
 const { ApolloServer } = require('apollo-server-express');
+const { defaultMergedResolver } = require('graphql-tools-fork');
 const { RedisPubSub } = require('graphql-redis-subscriptions');
 const { createDbSchema } = require('./createDbSchema');
 const {
@@ -33,6 +34,7 @@ class Server {
     this.server = new ApolloServer({
       typeDefs,
       resolvers,
+      fieldResolver: defaultMergedResolver,
       subscriptions: {
         // Use base path for subscriptions on websocket protocol
         path: '/',
