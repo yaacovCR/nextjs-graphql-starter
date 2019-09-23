@@ -7,8 +7,8 @@
     "playground": "graphql -e .env playground"
   },
   "devDependencies": {
-    "graphql": "^14.4.2",
-    "graphql-cli": "^3.0.11",
+    "graphql": "^14.5.7",
+    "graphql-cli": "^3.0.14",
     "prettier": "1.18.2"
   },
   "dependencies": {

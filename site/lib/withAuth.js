@@ -4,16 +4,7 @@ import Toolbar from '../components/Toolbar';
 import SignIn from '../components/SignIn';
 
 export default Component => {
-  return class withAuth extends React.Component {
-    static async getInitialProps(ctx) {
-      let pageProps = {};
-      if (Component.getInitialProps) {
-        pageProps = await Component.getInitialProps(ctx);
-      }
-
-      return pageProps;
-    }
-
+  class WithAuth extends React.Component {
     constructor(props) {
       super(props);
     }
@@ -42,4 +33,13 @@ export default Component => {
       );
     }
   };
+  if (Component.getInitialProps) {
+    return class extends WithAuth {
+      static async getInitialProps(ctx) {
+        return await Component.getInitialProps(ctx);
+      }
+    }
+  } else {
+    return WithAuth;
+  }
 };

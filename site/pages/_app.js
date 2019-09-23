@@ -23,7 +23,7 @@ class MyApp extends App {
   render() {
     const { Component, pageProps, apolloClient } = this.props;
     return (
-      <Container>
+      <>
         <Head>
           <title>nextjs-graphql-starter</title>
         </Head>
@@ -33,7 +33,7 @@ class MyApp extends App {
             <Component {...pageProps} />
           </ApolloProvider>
         </ThemeProvider>
-      </Container>
+      </>
     );
   }
 }
