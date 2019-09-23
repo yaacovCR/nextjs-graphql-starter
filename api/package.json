@@ -11,7 +11,7 @@
     "apollo-link-http": "^1.5.16",
     "apollo-link-ws": "^1.0.19",
     "apollo-server-express": "^2.9.3",
-    "apollo-stitcher": "^0.3.2",
+    "apollo-stitcher": "^0.3.3",
     "apollo-utilities": "^1.3.2",
     "bcryptjs": "^2.4.3",
     "connect-redis": "^4.0.2",
