@@ -22,7 +22,7 @@
     "http-proxy-middleware": "^0.21.0",
     "isomorphic-unfetch": "^3.0.0",
     "jss": "^10.0.4",
-    "next": "^9.2.1",
+    "next": "^9.3.2",
     "next-compose-plugins": "^2.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
