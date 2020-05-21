@@ -12,16 +12,15 @@ const wrapInsert = {
 };
 
 class DbStitcher extends Stitcher {
-  userExists(args) {
-    return this.execute({
+  async userExists(args) {
+    return !!(await this.execute({
       operation: 'query',
       fieldName: 'user_by_pk',
       args,
       selectionSet: stitch`{
         email
       }`,
-      result: result => !!result
-    });
+    }));
   }
 
   delegateToGetUser(args) {

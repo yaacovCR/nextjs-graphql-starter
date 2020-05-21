@@ -1,11 +1,10 @@
 const { ApolloServer } = require('apollo-server-express');
-const { defaultMergedResolver } = require('graphql-tools-fork');
+const { defaultMergedResolver } = require('@graphql-tools/delegate');
+const { linkToExecutor, linkToSubscriber } = require('@graphql-tools/links');
+const { wrapSchema } = require('@graphql-tools/wrap');
 const { RedisPubSub } = require('graphql-redis-subscriptions');
 const { createDbSchema } = require('./createDbSchema');
-const {
-  makeRemoteExecutableSchema,
-  ApolloClientLink
-} = require('apollo-stitcher');
+const { ApolloClientLink } = require('apollo-stitcher');
 const { createLink } = require('./createLink');
 const { ApolloClient } = require('apollo-client');
 const { InMemoryCache } = require('apollo-cache-inmemory');
@@ -26,9 +25,10 @@ class Server {
 
   async prepare() {
     const pubsub = new RedisPubSub({ connection: this.options.redisOptions });
-    const schema = makeRemoteExecutableSchema({
+    const schema = wrapSchema({
       schema: await createDbSchema(httpUri),
-      dispatcher: context => context.link
+      executor: (params) => linkToExecutor(params.context.link)(params),
+      subscriber: (params) => linkToSubscriber(params.context.link)(params),
     });
 
     this.server = new ApolloServer({
