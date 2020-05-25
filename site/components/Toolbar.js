@@ -11,12 +11,12 @@ import { LogoutMutation } from '../lib/mutations';
 
 const styles = {
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
 };
 
 function MyToolbar(props) {
@@ -43,7 +43,7 @@ function MyToolbar(props) {
         </Typography>
         {props.loggedInUser && (
           <LogoutMutation>
-            {mutation => (
+            {(mutation) => (
               <Button color="inherit" onClick={mutation}>
                 Logout
               </Button>
@@ -57,7 +57,7 @@ function MyToolbar(props) {
 
 MyToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  loggedInUser: PropTypes.object
+  loggedInUser: PropTypes.object,
 };
 
 export default withStyles(styles)(MyToolbar);

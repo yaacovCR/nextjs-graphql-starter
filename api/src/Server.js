@@ -41,8 +41,8 @@ class Server {
         // Supplement subscription context with function allowing dynamic session access
         onConnect: createOnConnectHandler({
           sessionName: this.options.sessionName,
-          redisOptions: this.options.redisOptions
-        })
+          redisOptions: this.options.redisOptions,
+        }),
       },
 
       context: ({ req, connection }) => {
@@ -53,9 +53,9 @@ class Server {
             client: new ApolloClient({
               cache: new InMemoryCache(),
               link: createLink({ httpUri, wsUri }),
-              ssrMode: true
-            })
-          })
+              ssrMode: true,
+            }),
+          }),
         };
 
         // In hybrid websocket deployments, subscriptions supply connection argument instead of
@@ -69,21 +69,21 @@ class Server {
         if (connection) {
           return {
             ...context,
-            ...connection.context
+            ...connection.context,
           };
         }
 
         return {
           ...context,
-          session: req.session
+          session: req.session,
         };
       },
 
       dataSources: () => {
         return {
-          db: new DbStitcher({ schema })
+          db: new DbStitcher({ schema }),
         };
-      }
+      },
     });
   }
 
@@ -93,7 +93,7 @@ class Server {
     applyExpressMiddleware({
       app,
       sessionName: this.options.sessionName,
-      redisOptions: this.options.redisOptions
+      redisOptions: this.options.redisOptions,
     });
     const path = process.env.ENDPOINT ? process.env.ENDPOINT : '/api';
     this.server.applyMiddleware({ app, path });
@@ -112,14 +112,12 @@ class Server {
         `Server ready at http://localhost:${port}${this.server.graphqlPath}`
       );
       console.log(
-        `Subscriptions ready at ws://localhost:${port}${
-          this.server.subscriptionsPath
-        }`
+        `Subscriptions ready at ws://localhost:${port}${this.server.subscriptionsPath}`
       );
     });
   }
 }
 
 module.exports = {
-  Server
+  Server,
 };

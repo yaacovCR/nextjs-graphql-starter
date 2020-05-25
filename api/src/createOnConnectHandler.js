@@ -13,7 +13,7 @@ const createOnConnectHandler = ({ sessionName, redisOptions }) => {
     const raw = cookie.parse(header)[sessionName];
     const sid = signature.unsign(raw.slice(2), process.env.SECRET);
     return {
-      getSession: util.promisify(callback => sessionStore.get(sid, callback))
+      getSession: util.promisify((callback) => sessionStore.get(sid, callback)),
     };
   };
 };

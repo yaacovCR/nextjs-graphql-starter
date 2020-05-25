@@ -7,8 +7,8 @@ const wrapInsert = {
       ...PreStitch
     }
   }`,
-  result: result =>
-    result && result.affected_rows ? result.returning[0] : null
+  result: (result) =>
+    result && result.affected_rows ? result.returning[0] : null,
 };
 
 class DbStitcher extends Stitcher {
@@ -27,7 +27,7 @@ class DbStitcher extends Stitcher {
     return this.delegateTo({
       operation: 'query',
       fieldName: 'user_by_pk',
-      args
+      args,
     });
   }
 
@@ -36,12 +36,12 @@ class DbStitcher extends Stitcher {
       operation: 'mutation',
       fieldName: 'insert_user',
       args: {
-        objects: [args]
-      }
+        objects: [args],
+      },
     });
   }
 }
 
 module.exports = {
-  DbStitcher
+  DbStitcher,
 };

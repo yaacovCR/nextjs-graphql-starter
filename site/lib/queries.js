@@ -26,7 +26,7 @@ function makeQuery(query, displayName) {
   if (displayName) MyQuery.displayName = displayName;
 
   MyQuery.propTypes = {
-    children: PropTypes.func.isRequired
+    children: PropTypes.func.isRequired,
   };
 
   return MyQuery;

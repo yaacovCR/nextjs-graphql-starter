@@ -4,20 +4,20 @@ const { stitch } = require('apollo-stitcher');
 const extractLoggedInUser = {
   selectionSet: stitch`{
     ...PreStitch @extract(path: ["session", "loggedInUser"])          
-  }`
+  }`,
 };
 
 const addPassword = {
   selectionSet: stitch`{
     ...PreStitch
     password          
-  }`
+  }`,
 };
 
 const Mutation = {
   signUp: async (parent, args, context, info) => {
     const {
-      input: { email, password }
+      input: { email, password },
     } = args;
     const lowerCaseEmail = email.toLowerCase();
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -31,26 +31,26 @@ const Mutation = {
       .transform(extractLoggedInUser)
       .delegateToInsertUser({
         email: lowerCaseEmail,
-        password: hashedPassword
+        password: hashedPassword,
       });
 
     if (user) {
       context.session.user = {
-        id: lowerCaseEmail
+        id: lowerCaseEmail,
       };
     }
 
     return {
       response: 'SUCCESS',
       session: {
-        loggedInUser: user
-      }
+        loggedInUser: user,
+      },
     };
   },
 
   login: async (parent, args, context, info) => {
     const {
-      input: { email, password }
+      input: { email, password },
     } = args;
     const lowerCaseEmail = email.toLowerCase();
 
@@ -65,14 +65,14 @@ const Mutation = {
     }
 
     context.session.user = {
-      id: lowerCaseEmail
+      id: lowerCaseEmail,
     };
 
     return {
       response: 'SUCCESS',
       session: {
-        loggedInUser: user
-      }
+        loggedInUser: user,
+      },
     };
   },
 
@@ -86,12 +86,12 @@ const Mutation = {
     return {
       response: 'SUCCESS',
       session: {
-        loggedInUser: null
-      }
+        loggedInUser: null,
+      },
     };
-  }
+  },
 };
 
 module.exports = {
-  Mutation
+  Mutation,
 };

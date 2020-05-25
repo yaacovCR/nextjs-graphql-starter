@@ -47,8 +47,8 @@ services:
       - 'postgres'
     environment:
       HASURA_GRAPHQL_DATABASE_URL: ${DATABASE_URL}
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
-      HASURA_GRAPHQL_ENABLE_TELEMETRY: "false"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
+      HASURA_GRAPHQL_ENABLE_TELEMETRY: 'false'
       ## uncomment next line to set an access key
       # HASURA_GRAPHQL_ACCESS_KEY: mysecretaccesskey
   postgres:

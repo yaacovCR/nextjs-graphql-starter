@@ -5,11 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import Link from 'next/link';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing(20)
-  }
+    paddingTop: theme.spacing(20),
+  },
 });
 
 function About(props) {
@@ -36,7 +36,7 @@ function About(props) {
 }
 
 About.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(About);

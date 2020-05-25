@@ -1,5 +1,6 @@
 - args:
-    sql: CREATE TABLE "public"."user"("email" text NOT NULL UNIQUE, "password" text
+    sql:
+      CREATE TABLE "public"."user"("email" text NOT NULL UNIQUE, "password" text
       NOT NULL, PRIMARY KEY ("email") );
   type: run_sql
 - args:

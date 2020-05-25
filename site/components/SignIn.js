@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { SignUpMutation, LoginMutation } from '../lib/mutations';
 
-const styles = theme => ({
+const styles = (theme) => ({
   main: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
@@ -18,33 +18,34 @@ const styles = theme => ({
     [theme.breakpoints.up(400 + theme.spacing(3 * 2))]: {
       width: 400,
       marginLeft: 'auto',
-      marginRight: 'auto'
-    }
+      marginRight: 'auto',
+    },
   },
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme
-      .spacing(3)}px`
+    padding: `${theme.spacing(2)}px ${theme.spacing(3)}px ${theme.spacing(
+      3
+    )}px`,
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   buttons: {
     display: 'flex',
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   button: {
     marginLeft: theme.spacing(2),
-    marginRight: theme.spacing(2)
-  }
+    marginRight: theme.spacing(2),
+  },
 });
 
 class SignIn extends Component {
@@ -53,22 +54,22 @@ class SignIn extends Component {
     this.state = {
       email: '',
       password: '',
-      error: ''
+      error: '',
     };
   }
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
-  handleSignUpMutationResponse = data => {
+  handleSignUpMutationResponse = (data) => {
     if (data.signUp.response !== 'SUCCESS')
       this.setState({ error: data.signUp.response });
   };
 
-  handleLoginMutationResponse = data => {
+  handleLoginMutationResponse = (data) => {
     if (data.login.response !== 'SUCCESS')
       this.setState({ error: data.login.response });
   };
@@ -124,11 +125,11 @@ class SignIn extends Component {
               <SignUpMutation
                 variables={{
                   email: this.state.email,
-                  password: this.state.password
+                  password: this.state.password,
                 }}
                 onCompleted={this.handleSignUpMutationResponse}
               >
-                {mutation => (
+                {(mutation) => (
                   <Button
                     className={classes.button}
                     fullWidth
@@ -143,11 +144,11 @@ class SignIn extends Component {
               <LoginMutation
                 variables={{
                   email: this.state.email,
-                  password: this.state.password
+                  password: this.state.password,
                 }}
                 onCompleted={this.handleLoginMutationResponse}
               >
-                {mutation => (
+                {(mutation) => (
                   <Button
                     className={classes.button}
                     fullWidth
@@ -168,7 +169,7 @@ class SignIn extends Component {
 }
 
 SignIn.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(styles)(SignIn);

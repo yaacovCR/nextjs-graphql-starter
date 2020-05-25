@@ -8,17 +8,17 @@ function getCookies(req) {
   return req ? req.headers.cookie || undefined : undefined;
 }
 
-export default App => {
+export default (App) => {
   return class withApollo extends React.Component {
     static propTypes = {
-      apolloState: PropTypes.object.isRequired
+      apolloState: PropTypes.object.isRequired,
     };
 
     static async getInitialProps(ctx) {
       const {
         Component,
         router,
-        ctx: { req, res }
+        ctx: { req, res },
       } = ctx;
       const apolloClient = getApolloClient(
         {},
@@ -71,7 +71,7 @@ export default App => {
 
       return {
         ...appProps,
-        apolloState
+        apolloState,
       };
     }
 

@@ -57,7 +57,7 @@ function makeMutation(mutation, displayName) {
   if (displayName) MyMutation.displayName = displayName;
 
   MyMutation.propTypes = {
-    children: PropTypes.func.isRequired
+    children: PropTypes.func.isRequired,
   };
 
   return MyMutation;

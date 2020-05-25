@@ -24,8 +24,8 @@ function createApolloClient(initialState, { getCookies }) {
     return {
       headers: {
         ...headers,
-        cookie
-      }
+        cookie,
+      },
     };
   });
 
@@ -41,15 +41,15 @@ function createApolloClient(initialState, { getCookies }) {
 
   const httpLink = new HttpLink({
     uri: publicRuntimeConfig.GRAPHQL_ENDPOINT, // Server URL (must be absolute)
-    credentials: 'same-origin' // Additional fetch() options like `credentials` or `headers`
+    credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
   });
 
   const wsLink = new WebSocketLink({
     uri: publicRuntimeConfig.WS_ENDPOINT,
     options: {
-      reconnect: true
+      reconnect: true,
     },
-    webSocketImpl: ws.client
+    webSocketImpl: ws.client,
   });
 
   const terminatingLink = split(
@@ -64,7 +64,7 @@ function createApolloClient(initialState, { getCookies }) {
   const link = ApolloLink.from([errorLink, authLink, terminatingLink]);
 
   const cache = new InMemoryCache({
-    dataIdFromObject: object => {
+    dataIdFromObject: (object) => {
       switch (object.__typename) {
         case 'Session':
           return 'Session'; // Singleton
@@ -73,14 +73,14 @@ function createApolloClient(initialState, { getCookies }) {
         default:
           return defaultDataIdFromObject(object); // fall back to default handling
       }
-    }
+    },
   }).restore(initialState || {});
 
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
     link,
-    cache
+    cache,
   });
 }
 

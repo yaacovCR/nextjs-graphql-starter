@@ -19,15 +19,15 @@ function createLink({ httpUri, wsUri }) {
 
   const httpLink = new HttpLink({
     uri: httpUri, // Server URL (must be absolute)
-    fetch
+    fetch,
   });
 
   const wsLink = new WebSocketLink({
     uri: wsUri,
     options: {
-      reconnect: true
+      reconnect: true,
     },
-    webSocketImpl: ws.client
+    webSocketImpl: ws.client,
   });
 
   const terminatingLink = split(

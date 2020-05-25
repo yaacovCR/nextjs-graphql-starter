@@ -3,7 +3,7 @@ import { GetSessionQuery } from './queries';
 import Toolbar from '../components/Toolbar';
 import SignIn from '../components/SignIn';
 
-export default Component => {
+export default (Component) => {
   class WithAuth extends React.Component {
     constructor(props) {
       super(props);
@@ -32,13 +32,13 @@ export default Component => {
         </GetSessionQuery>
       );
     }
-  };
+  }
   if (Component.getInitialProps) {
     return class extends WithAuth {
       static async getInitialProps(ctx) {
         return await Component.getInitialProps(ctx);
       }
-    }
+    };
   } else {
     return WithAuth;
   }

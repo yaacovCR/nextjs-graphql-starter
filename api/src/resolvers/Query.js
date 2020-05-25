@@ -2,7 +2,7 @@ const Query = {
   getSession: async (parent, args, context, info) => {
     if (!context.session.user) {
       return {
-        loggedInUser: null
+        loggedInUser: null,
       };
     }
 
@@ -11,16 +11,16 @@ const Query = {
       .transform({
         selectionSet: `{
           ...PreStitch @extract(path: "loggedInUser")
-        }`
+        }`,
       })
       .delegateToGetUser({ email: context.session.user.id });
 
     return {
-      loggedInUser: user
+      loggedInUser: user,
     };
-  }
+  },
 };
 
 module.exports = {
-  Query
+  Query,
 };
