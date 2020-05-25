@@ -1,0 +1,11 @@
+{
+  "name": "hasura",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "hasura": "hasura"
+  },
+  "devDependencies": {
+    "hasura-cli": "^1.2.1"
+  }
+}
