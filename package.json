@@ -10,8 +10,5 @@
     "graphql": "^14.6.0",
     "graphql-cli": "^3.0.14",
     "prettier": "1.19.1"
-  },
-  "dependencies": {
-    "dotenv-load": "^2.0.0"
   }
 }
