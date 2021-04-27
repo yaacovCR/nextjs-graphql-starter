@@ -27,7 +27,7 @@
     "graphql-redis-subscriptions": "^2.2.1",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.0",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "websocket": "^1.0.31"
   },
   "scripts": {
